@@ -1,6 +1,6 @@
 # Katachi
 
-Small Electron app for playing games against KataGo's human SL network. Made by Codex 5.5, though reusing a bunch of human-written Ogatak modules.
+Small Electron app for playing games against KataGo's human SL network.
 
 ## Run
 
@@ -34,4 +34,6 @@ The app runs KataGo in analysis mode using the human model as the main model:
 katago analysis -config <config> -model <human-network> -quit-without-waiting
 ```
 
-For each engine turn it sends a one-visit query with `includePolicy: true`, passes `humanSLProfile` in `overrideSettings`, and samples from `humanPolicy` if present or `policy` otherwise. SGF load/save and board legality are reused from Ogatak modules.
+For each engine turn it sends a one-visit query with `includePolicy: true`, passes `humanSLProfile` in `overrideSettings`, and samples from `humanPolicy` if present or `policy` otherwise.
+
+Made by Codex 5.5, though reusing a bunch of human-written Ogatak modules.

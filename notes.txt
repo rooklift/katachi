@@ -1,0 +1,26 @@
+Setting Up to Use the Model
+
+There are two ways to pass in the human SL model.
+
+    The basic intended way: pass an additional argument -human-model b18c384nbt-humanv0.bin.gz in addition to still passing in KataGo's normal model.
+        For example: ./katago analysis -config configs/analysis_example.cfg -model models/kata1-b28c512nbt-s7382862592-d4374571218.bin.gz -human-model models/b18c384nbt-humanv0.bin.gz.
+        Additionally, provide humanSLProfile via overrideSettings on queries. See documentation above for overrideSettings.
+        Additionally, make sure to request "includePolicy":true in the query.
+        Then, a new humanPolicy field will be reported on the result, indicating KataGo's prediction of how random human players matching the given humanSLProfile (e.g. 5 kyu rank) might play.
+        If no further parameters are set, KataGo's main model will still be used for all other analysis.
+        If further parameters are set, interesting blended usages of the KataGo's main model and the human SL model are possible. See some "recipes" below.
+
+    An alternative way: pass -model b18c384nbt-humanv0.bin.gz instead of KataGo's normal model, using the human model exclusively.
+
+        For example: ./katago analysis -config configs/analysis_example.cfg -model models/b18c384nbt-humanv0.bin.gz.
+
+        Additionally, provide humanSLProfile via overrideSettings on queries. See documentation above for overrideSettings. (In the case of GTP, set humanSLProfile in the GTP config, and update it at runtime via kata-set-param if you want to change it dynamically).
+
+        Then, KataGo will use the human model at the configured profile for all analysis, rather than its normal typically-superhuman analysis.
+
+        Note that if you are searching with many visits (or even just a few visits!), typically you can expect that KataGo will NOT match the strength of a player of the given humanSLProfile, but will still be stronger because the search will probably solve a lot of tactics that players of a weaker rank would not solve.
+            The human SL model is trained such that using only one visit, and full temperature (i.e. choosing random moves from the policy proportionally often, rather than always choosing the top move), will give the closest match to how players of the given rank might play. This should be true up to mid-high dan level, at which point the raw model might start to fall short and need more than 1 visit to keep up in strength.
+
+        If used as the main model, the human SL model may have significantly more pathologies and biases in its reported winrates and scores than KataGo's normal model, due to the SGF data it trained on.
+            For example, in handicap games it might not report accurate scores or winrates because in recorded human handicap SGFs, White is usually a stronger player than Black and/or some servers may underhandicap games, biasing the result.
+            For example, in even games, it might report erroneous scores and winrates after a big swing or in extreme positions, due to how human players may resign or go on tilt, or due to inaccurately recorded player ranks in the training data, or due to some fraction of sandbagger/airbagger games or AI cheating games in the training data.

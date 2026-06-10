@@ -1,0 +1,285 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  color: #f0ece2;
+  background: #202225;
+  font-family: "Segoe UI", Arial, sans-serif;
+  letter-spacing: 0;
+}
+
+button,
+select,
+input {
+  font: inherit;
+}
+
+button {
+  min-height: 32px;
+  border: 1px solid #555b62;
+  border-radius: 6px;
+  color: #f2f2f2;
+  background: #343940;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #424851;
+}
+
+.toggleButton.on {
+  color: #dff7e9;
+  border-color: #4f8b65;
+  background: #24402f;
+}
+
+select,
+input {
+  width: 100%;
+  min-height: 32px;
+  border: 1px solid #555b62;
+  border-radius: 6px;
+  color: #f2f2f2;
+  background: #282c31;
+  padding: 4px 8px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #33383f;
+  background: #25292e;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.badge {
+  min-width: 118px;
+  text-align: center;
+  border: 1px solid #68707a;
+  border-radius: 999px;
+  padding: 5px 10px;
+  color: #d4d8dd;
+  background: #2b3036;
+}
+
+.badge.ready {
+  color: #dff7e9;
+  border-color: #4f8b65;
+  background: #24402f;
+}
+
+.badge.starting {
+  color: #fff2ce;
+  border-color: #95743b;
+  background: #44361d;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: minmax(520px, 1fr) 320px;
+  height: calc(100% - 48px);
+  min-height: 0;
+}
+
+.boardPane {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-width: 0;
+  min-height: 0;
+  padding: 14px;
+}
+
+.boardHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 38px;
+  align-items: center;
+  color: #f1efe8;
+}
+
+.boardHeader strong {
+  display: block;
+  font-size: 18px;
+}
+
+.boardHeader span,
+#lastMoveText {
+  color: #c8c5bd;
+  font-size: 13px;
+}
+
+#boardWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+}
+
+#boardSurface {
+  position: relative;
+  flex: none;
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+#boardBg {
+  position: absolute;
+  inset: 0;
+  background-color: #d0ad75;
+  background-image: url("./gfx/board.png");
+  background-repeat: repeat;
+  z-index: 1;
+}
+
+#boardTable {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: rgba(36, 24, 11, 0.82);
+  user-select: none;
+}
+
+#boardTable td {
+  position: relative;
+  padding: 0;
+  border: 0;
+  text-align: center;
+  vertical-align: middle;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+#boardTable .point {
+  cursor: pointer;
+}
+
+#boardTable .coord {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.lastMarker {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 36%;
+  height: 36%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.lastMarker.onBlack {
+  border: 2px solid #eee8dc;
+}
+
+.lastMarker.onWhite {
+  border: 2px solid #161616;
+}
+
+#statusLine {
+  min-height: 28px;
+  padding-top: 8px;
+  color: #ded7c9;
+}
+
+.sidePanel {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 14px;
+  min-height: 0;
+  overflow: auto;
+  padding: 14px;
+  border-left: 1px solid #33383f;
+  background: #24282d;
+}
+
+.sidePanel section {
+  display: grid;
+  gap: 10px;
+}
+
+h2 {
+  margin: 0 0 2px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #b9c0c8;
+  text-transform: uppercase;
+}
+
+label {
+  display: grid;
+  gap: 5px;
+  color: #c9ced5;
+  font-size: 13px;
+}
+
+.paths {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  font-size: 12px;
+}
+
+.paths dt {
+  color: #aab1ba;
+}
+
+.paths dd {
+  min-width: 0;
+  margin: 0 0 7px;
+  overflow-wrap: anywhere;
+  color: #e7e2d7;
+}
+
+#log {
+  height: 156px;
+  overflow: auto;
+  border: 1px solid #3c424a;
+  border-radius: 6px;
+  padding: 8px;
+  color: #d5dce2;
+  background: #1b1e22;
+  font: 12px Consolas, monospace;
+}
+
+#log div {
+  margin-bottom: 4px;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 920px) {
+  .main {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(420px, 1fr) auto;
+  }
+
+  .sidePanel {
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+    border-left: 0;
+    border-top: 1px solid #33383f;
+  }
+}

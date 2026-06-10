@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:;">
+  <title>Katachi</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <header class="toolbar">
+      <button id="newGame">New</button>
+      <button id="loadSgf">Load SGF</button>
+      <button id="saveSgf">Save</button>
+      <button id="saveAsSgf">Save As</button>
+      <button id="copySgf">Copy SGF</button>
+      <button id="undoMove">Undo</button>
+      <button id="passMove">Pass</button>
+      <button id="topPolicyToggle" class="toggleButton" aria-pressed="false">Top Policy</button>
+      <div class="spacer"></div>
+      <span id="engineBadge" class="badge">Engine stopped</span>
+    </header>
+
+    <main class="main">
+      <section class="boardPane">
+        <div class="boardHeader">
+          <div>
+            <strong id="gameTitle">New game</strong>
+            <span id="turnText">Black to play</span>
+          </div>
+          <div id="lastMoveText"></div>
+        </div>
+        <div id="boardWrap">
+          <div id="boardSurface">
+            <div id="boardBg"></div>
+            <table id="boardTable" aria-label="Go board"></table>
+          </div>
+        </div>
+        <div id="statusLine"></div>
+      </section>
+
+      <aside class="sidePanel">
+        <section>
+          <h2>Engine</h2>
+          <button id="chooseKatago">Locate KataGo</button>
+          <button id="chooseHumanModel">Locate Human Network</button>
+          <button id="chooseConfig">Use Config</button>
+          <button id="startEngine">Start</button>
+          <button id="stopEngine">Stop</button>
+          <dl class="paths">
+            <dt>KataGo</dt><dd id="katagoPath">Not set</dd>
+            <dt>Human network</dt><dd id="humanModelPath">Not set</dd>
+            <dt>Config</dt><dd id="configPath">Generated</dd>
+          </dl>
+        </section>
+
+        <section>
+          <h2>Game</h2>
+          <label>Human plays
+            <select id="humanColor">
+              <option value="b">Black</option>
+              <option value="w">White</option>
+            </select>
+          </label>
+          <label>Human profile
+            <input id="humanProfile" value="rank_5k" spellcheck="false">
+          </label>
+          <label>Board size
+            <select id="boardSize">
+              <option value="19">19</option>
+              <option value="13">13</option>
+              <option value="9">9</option>
+            </select>
+          </label>
+          <label>Komi
+            <input id="komi" type="number" value="7.5" step="0.5">
+          </label>
+          <label>Rules
+            <select id="rules">
+              <option value="Chinese">Chinese</option>
+              <option value="Japanese">Japanese</option>
+              <option value="AGA">AGA</option>
+              <option value="Tromp-Taylor">Tromp-Taylor</option>
+            </select>
+          </label>
+        </section>
+
+        <section>
+          <h2>Log</h2>
+          <div id="log"></div>
+        </section>
+      </aside>
+    </main>
+  </div>
+  <script src="renderer.js"></script>
+</body>
+</html>

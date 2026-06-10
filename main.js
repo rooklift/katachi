@@ -231,7 +231,6 @@ function writeDefaultAnalysisConfig() {
     "nnMutexPoolSizePowerOfTwo = 14",
     "nnRandomize = true",
     "ignorePreRootHistory = false",
-    "analysisIgnorePreRootHistory = false",
     ""
   ].join("\n");
   const cfgPath = userDataFile("analysis_human.cfg");

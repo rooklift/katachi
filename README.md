@@ -1,6 +1,6 @@
 # Katachi
 
-Small Electron app for playing games against KataGo's human SL network.
+Small Electron app for playing games against KataGo's human SL network. Made by Codex 5.5, though reusing a bunch of human-written Ogatak modules.
 
 ## Run
 

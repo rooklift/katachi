@@ -320,10 +320,7 @@ function startEngine() {
   stderr.on("line", (line) => {
     logLine(line);
     if (line.includes("ready to begin handling requests")) {
-      engineReady = true;
-      engineStarting = false;
-      updateEngineState();
-      maybeEngineMove();
+      markEngineReady();
     }
   });
 
@@ -362,6 +359,15 @@ function stopEngine() {
   }
   stopEngineInternal();
   return {ok: true};
+}
+
+function markEngineReady() {
+  if (engineReady) return;
+  engineReady = true;
+  engineStarting = false;
+  state.status = "KataGo ready";
+  updateEngineState();
+  maybeEngineMove();
 }
 
 function updateEngineState() {
@@ -405,11 +411,8 @@ function receiveEngineLine(line) {
   }
 
   if (obj.id === "version") {
-    engineReady = true;
-    engineStarting = false;
     logLine(`KataGo ${obj.version || "started"}`);
-    updateEngineState();
-    maybeEngineMove();
+    markEngineReady();
     return;
   }
 

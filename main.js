@@ -739,12 +739,22 @@ function registerIpc() {
   ipcMain.handle("app:copy-sgf", () => copySgfToClipboard());
   ipcMain.handle("app:set-option", (_event, key, value) => {
     if (Object.prototype.hasOwnProperty.call(state.config, key)) {
+      if (key === "komi") value = numberOption(value, state.config.komi, 7.5);
+      if (key === "rules") value = stringOption(value, state.config.rules, "Chinese");
       state.config[key] = value;
       saveConfig();
       if (key === "humanProfile") {
         maybeEngineMove();
       } else if (key === "topPolicy") {
         state.status = state.config.topPolicy ? "Using top policy move" : "Sampling policy";
+      } else if (key === "komi" && root) {
+        root.set("KM", String(value));
+        dirty = true;
+        state.status = `Komi set to ${value}`;
+      } else if (key === "rules" && root) {
+        root.set("RU", value);
+        dirty = true;
+        state.status = `Rules set to ${value}`;
       }
       sendState();
     }

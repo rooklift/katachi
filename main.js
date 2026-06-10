@@ -35,7 +35,11 @@ const state = {
     topPolicy: false,
     boardSize: 19,
     komi: 7.5,
-    rules: "Chinese"
+    rules: "Chinese",
+    windowSize: {
+      width: 1180,
+      height: 820
+    }
   },
   engine: {
     running: false,
@@ -63,10 +67,35 @@ function saveConfig() {
   fs.writeFileSync(userDataFile("config.json"), JSON.stringify(state.config, null, 2));
 }
 
+function windowDimension(value, fallback, min) {
+  const n = Number(value);
+  if (Number.isFinite(n)) return Math.max(min, Math.round(n));
+  return fallback;
+}
+
+function getSavedWindowSize() {
+  const saved = state.config.windowSize || {};
+  return {
+    width: windowDimension(saved.width, 1180, 900),
+    height: windowDimension(saved.height, 820, 640)
+  };
+}
+
+function saveWindowSize() {
+  if (!win || win.isDestroyed()) return;
+  const bounds = typeof win.getNormalBounds === "function" ? win.getNormalBounds() : win.getBounds();
+  state.config.windowSize = {
+    width: windowDimension(bounds.width, 1180, 900),
+    height: windowDimension(bounds.height, 820, 640)
+  };
+  saveConfig();
+}
+
 function createWindow() {
+  const savedSize = getSavedWindowSize();
   win = new BrowserWindow({
-    width: 1180,
-    height: 820,
+    width: savedSize.width,
+    height: savedSize.height,
     minWidth: 900,
     minHeight: 640,
     backgroundColor: "#202225",
@@ -90,6 +119,7 @@ function createWindow() {
     }
   });
   win.loadFile("index.html");
+  win.on("close", saveWindowSize);
   win.on("closed", () => {
     win = null;
   });

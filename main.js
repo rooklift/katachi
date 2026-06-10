@@ -415,8 +415,8 @@ function receiveEngineLine(line) {
 
   if (obj.warning) {
     logLine(obj.warning);
-    // A warning can arrive attached to an actual result, in which case the
-    // message must still be processed as the answer to the pending query.
+    // A warning might (?) arrive attached to an actual result, in which case
+    // the message must still be processed as the answer to the pending query.
     const isResult = Object.prototype.hasOwnProperty.call(obj, "turnNumber") ||
       Array.isArray(obj.moveInfos) ||
       Array.isArray(obj.policy) ||

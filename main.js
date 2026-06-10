@@ -413,14 +413,26 @@ function receiveEngineLine(line) {
     return;
   }
 
-  if (!pendingQuery || obj.id !== pendingQuery.id || obj.isDuringSearch) return;
+  if (obj.warning) {
+    logLine(obj.warning);
+    if (pendingQuery && obj.id === pendingQuery.id) {
+      state.status = obj.warning;
+      sendState();
+    }
+    return;
+  }
+
   if (obj.error) {
     state.status = obj.error;
     logLine(obj.error);
-    pendingQuery = null;
+    if (!obj.id || (pendingQuery && obj.id === pendingQuery.id)) {
+      pendingQuery = null;
+    }
     sendState();
     return;
   }
+
+  if (!pendingQuery || obj.id !== pendingQuery.id || obj.isDuringSearch) return;
 
   const query = pendingQuery;
   const waitMs = Math.max(0, 1000 - (Date.now() - query.startedAt));
@@ -461,7 +473,7 @@ function buildQuery(node, id) {
     overrideSettings: {
       humanSLProfile: state.config.humanProfile || "rank_5k",
       ignorePreRootHistory: false,
-      reportAnalysisWinratesAs: "BLACK"
+      reportAnalysisWinratesAs: "BLACK",
     },
     initialStones: [],
     moves: []

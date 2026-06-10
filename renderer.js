@@ -7,7 +7,6 @@ let gridCache = null;
 const boardSurface = document.getElementById("boardSurface");
 const boardBg = document.getElementById("boardBg");
 const boardTable = document.getElementById("boardTable");
-const logEl = document.getElementById("log");
 
 const els = {
   engineBadge: document.getElementById("engineBadge"),
@@ -31,21 +30,21 @@ function $(id) {
 }
 
 function bindControls() {
-  $("chooseKatago").addEventListener("click", () => call(window.katagoHuman.chooseKatago()));
-  $("chooseHumanModel").addEventListener("click", () => call(window.katagoHuman.chooseHumanModel()));
-  $("chooseConfig").addEventListener("click", () => call(window.katagoHuman.chooseConfig()));
-  $("startEngine").addEventListener("click", () => call(window.katagoHuman.startEngine()));
-  $("stopEngine").addEventListener("click", () => call(window.katagoHuman.stopEngine()));
-  $("newGame").addEventListener("click", () => call(window.katagoHuman.newGame(readGameOptions())));
-  $("loadSgf").addEventListener("click", () => call(window.katagoHuman.loadSgf()));
-  $("saveSgf").addEventListener("click", () => call(window.katagoHuman.saveSgf()));
-  $("saveAsSgf").addEventListener("click", () => call(window.katagoHuman.saveAsSgf()));
-  $("copySgf").addEventListener("click", () => call(window.katagoHuman.copySgf()));
-  $("undoMove").addEventListener("click", () => call(window.katagoHuman.undo()));
-  $("passMove").addEventListener("click", () => call(window.katagoHuman.pass()));
+  $("chooseKatago").addEventListener("click", () => call(window.katachi.chooseKatago()));
+  $("chooseHumanModel").addEventListener("click", () => call(window.katachi.chooseHumanModel()));
+  $("chooseConfig").addEventListener("click", () => call(window.katachi.chooseConfig()));
+  $("startEngine").addEventListener("click", () => call(window.katachi.startEngine()));
+  $("stopEngine").addEventListener("click", () => call(window.katachi.stopEngine()));
+  $("newGame").addEventListener("click", () => call(window.katachi.newGame(readGameOptions())));
+  $("loadSgf").addEventListener("click", () => call(window.katachi.loadSgf()));
+  $("saveSgf").addEventListener("click", () => call(window.katachi.saveSgf()));
+  $("saveAsSgf").addEventListener("click", () => call(window.katachi.saveAsSgf()));
+  $("copySgf").addEventListener("click", () => call(window.katachi.copySgf()));
+  $("undoMove").addEventListener("click", () => call(window.katachi.undo()));
+  $("passMove").addEventListener("click", () => call(window.katachi.pass()));
   $("topPolicyToggle").addEventListener("click", () => {
     const nextValue = !Boolean(appState && appState.config && appState.config.topPolicy);
-    call(window.katagoHuman.setOption("topPolicy", nextValue));
+    call(window.katachi.setOption("topPolicy", nextValue));
   });
 
   for (const [key, el] of Object.entries({
@@ -56,7 +55,7 @@ function bindControls() {
     rules: els.rules
   })) {
     el.addEventListener("change", () => {
-      window.katagoHuman.setOption(key, el.value);
+      window.katachi.setOption(key, el.value);
     });
   }
 
@@ -218,7 +217,7 @@ function rebuildBoardTable(game, cellSize) {
 function onPointClick(event) {
   if (!appState || !appState.game || !appState.game.humanTurn) return;
   const point = event.currentTarget.dataset.point;
-  if (point) call(window.katagoHuman.play(point));
+  if (point) call(window.katachi.play(point));
 }
 
 function pointFromXY(x, y) {
@@ -312,14 +311,10 @@ function sliceGrid(sourceCtx, dest, destCtx, x, y, cellSize) {
   return dest.toDataURL("image/png");
 }
 
-window.katagoHuman.onState(render);
-window.katagoHuman.onLog((line) => {
-  const div = document.createElement("div");
-  div.textContent = line;
-  logEl.appendChild(div);
-  while (logEl.children.length > 120) logEl.removeChild(logEl.firstChild);
-  logEl.scrollTop = logEl.scrollHeight;
+window.katachi.onState(render);
+window.katachi.onLog((line) => {
+  console.log(line);
 });
 
 bindControls();
-window.katagoHuman.getState().then(render);
+window.katachi.getState().then(render);

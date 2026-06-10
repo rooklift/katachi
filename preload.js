@@ -2,7 +2,7 @@
 
 const {contextBridge, ipcRenderer} = require("electron");
 
-contextBridge.exposeInMainWorld("katagoHuman", {
+contextBridge.exposeInMainWorld("katachi", {
   getState: () => ipcRenderer.invoke("app:get-state"),
   chooseKatago: () => ipcRenderer.invoke("app:choose-katago"),
   chooseHumanModel: () => ipcRenderer.invoke("app:choose-human-model"),

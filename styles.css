@@ -255,22 +255,6 @@ label {
   color: #e7e2d7;
 }
 
-#log {
-  height: 156px;
-  overflow: auto;
-  border: 1px solid #3c424a;
-  border-radius: 6px;
-  padding: 8px;
-  color: #d5dce2;
-  background: #1b1e22;
-  font: 12px Consolas, monospace;
-}
-
-#log div {
-  margin-bottom: 4px;
-  overflow-wrap: anywhere;
-}
-
 @media (max-width: 920px) {
   .main {
     grid-template-columns: 1fr;

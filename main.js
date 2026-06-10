@@ -415,11 +415,19 @@ function receiveEngineLine(line) {
 
   if (obj.warning) {
     logLine(obj.warning);
-    if (pendingQuery && obj.id === pendingQuery.id) {
-      state.status = obj.warning;
-      sendState();
+    // A warning can arrive attached to an actual result, in which case the
+    // message must still be processed as the answer to the pending query.
+    const isResult = Object.prototype.hasOwnProperty.call(obj, "turnNumber") ||
+      Array.isArray(obj.moveInfos) ||
+      Array.isArray(obj.policy) ||
+      Array.isArray(obj.humanPolicy);
+    if (!isResult) {
+      if (pendingQuery && obj.id === pendingQuery.id) {
+        state.status = obj.warning;
+        sendState();
+      }
+      return;
     }
-    return;
   }
 
   if (obj.error) {

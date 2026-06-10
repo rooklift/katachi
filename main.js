@@ -98,6 +98,7 @@ function createWindow() {
     height: savedSize.height,
     minWidth: 900,
     minHeight: 640,
+    show: false,
     backgroundColor: "#202225",
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -117,6 +118,9 @@ function createWindow() {
       event.preventDefault();
       win.webContents.toggleDevTools();
     }
+  });
+  win.once("ready-to-show", () => {
+    if (win) win.show();
   });
   win.loadFile("index.html");
   win.on("close", saveWindowSize);

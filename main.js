@@ -455,14 +455,16 @@ function applyEngineMove(query, result) {
 	pendingQuery = null;
 	if (query.node !== currentNode) return;
 
-	const move = choosePolicyMove(result, currentNode);
-	if (move === null) {
+	const choice = choosePolicyMove(result, currentNode);
+	if (choice === null) {
 		state.status = "KataGo returned no legal move";
 		sendState();
 		return;
 	}
 
+	const move = choice.move;
 	currentNode = move === "" ? currentNode.pass() : currentNode.force_move(move);
+	currentNode.enginePolicy = policyPercentage(choice.prior);
 	currentNode.bless();
 	dirty = true;
 	state.status = move === "" ? "KataGo passed" : `KataGo played ${currentNode.get_board().gtp(move)}`;
@@ -567,7 +569,7 @@ function selectPolicyMove(choices) {
 
 function topPolicyChoice(choices) {
 	if (!choices.length) return null;
-	return choices.reduce((best, item) => item.prior > best.prior ? item : best).move;
+	return choices.reduce((best, item) => item.prior > best.prior ? item : best);
 }
 
 function weightedChoice(choices) {
@@ -576,9 +578,13 @@ function weightedChoice(choices) {
 	let r = Math.random() * total;
 	for (const item of choices) {
 		r -= item.prior;
-		if (r <= 0) return item.move;
+		if (r <= 0) return item;
 	}
-	return choices[choices.length - 1].move;
+	return choices[choices.length - 1];
+}
+
+function policyPercentage(prior) {
+	return Math.max(0, Math.min(99, Math.floor(prior * 100)));
 }
 
 function getSerializableState() {
@@ -617,9 +623,12 @@ function serializeGame() {
 
 function lastMove() {
 	if (!currentNode || !currentNode.parent) return null;
-	if (currentNode.has_key("B")) return {color: "b", move: currentNode.get("B")};
-	if (currentNode.has_key("W")) return {color: "w", move: currentNode.get("W")};
-	return null;
+	const color = currentNode.has_key("B") ? "b" : currentNode.has_key("W") ? "w" : null;
+	if (!color) return null;
+	const policy = color === getEngineColor() && Number.isInteger(currentNode.enginePolicy)
+		? currentNode.enginePolicy
+		: null;
+	return {color, move: currentNode.get(color.toUpperCase()), policy};
 }
 
 async function chooseFile(kind) {

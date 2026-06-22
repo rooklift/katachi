@@ -200,6 +200,25 @@ input {
 	border: 2px solid #161616;
 }
 
+.policyLabel {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	font-size: clamp(9px, 1.35vw, 16px);
+	font-weight: 700;
+	line-height: 1;
+	pointer-events: none;
+}
+
+.policyLabel.onBlack {
+	color: #eee8dc;
+}
+
+.policyLabel.onWhite {
+	color: #161616;
+}
+
 #statusLine {
 	min-height: 28px;
 	padding-top: 8px;

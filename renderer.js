@@ -125,7 +125,10 @@ function showStatus(text) {
 
 function formatLastMove(last, size) {
 	if (!last) return "";
-	if (!last.move) return `${nameColor(last.color)} passed`;
+	if (!last.move) {
+		const policy = Number.isInteger(last.policy) ? ` (policy ${last.policy})` : "";
+		return `${nameColor(last.color)} passed${policy}`;
+	}
 	const x = last.move.charCodeAt(0) - 97;
 	const y = last.move.charCodeAt(1) - 97;
 	return `${nameColor(last.color)} ${gtpFromXY(x, y, size)}`;
@@ -204,8 +207,10 @@ function rebuildBoardTable(game, cellSize) {
 				}
 
 				if (isLastMove(game.lastMove, bx, by)) {
+					const hasPolicy = Number.isInteger(game.lastMove.policy);
 					const mark = document.createElement("span");
-					mark.className = `lastMarker ${game.lastMove.color === "b" ? "onBlack" : "onWhite"}`;
+					mark.className = `${hasPolicy ? "policyLabel" : "lastMarker"} ${game.lastMove.color === "b" ? "onBlack" : "onWhite"}`;
+					if (hasPolicy) mark.textContent = String(game.lastMove.policy);
 					td.appendChild(mark);
 				}
 			}

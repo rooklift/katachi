@@ -1,3 +1,5 @@
+![Screenshot](https://github.com/user-attachments/assets/1cd9d6bd-db62-41c8-8ce9-01bf1418f6ff)
+
 # Katachi
 
 Small Electron app for playing games against KataGo's human SL network.
